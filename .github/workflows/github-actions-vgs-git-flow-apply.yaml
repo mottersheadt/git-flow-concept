@@ -1,0 +1,27 @@
+name: Apply to vault
+on:
+  push:
+    branches:
+      - master
+      
+jobs:
+  apply-changes:
+    runs-on: ubuntu-latest
+    steps:
+
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Install VGS CLI
+        run: |
+          pip3 install vgs-cli
+      - name: Apply to Vaults
+        run: |
+          for file in $(ls live/tnt*yaml sandbox/tnt*yaml );
+          do
+            vgs --debug apply routes --vault ${file/.yaml/} -f ${file};
+          done
+        env:
+          VGS_CLIENT_ID: ${{ secrets.VGS_CLIENT_ID }}
+          VGS_CLIENT_SECRET: ${{ secrets.VGS_CLIENT_SECRET }}
