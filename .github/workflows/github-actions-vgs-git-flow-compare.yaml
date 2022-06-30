@@ -2,7 +2,7 @@ name: Create production promotion pull request
 on:
   pull_request:
     branches:
-    - master
+    - main
 
 jobs:
   compare-changes:
