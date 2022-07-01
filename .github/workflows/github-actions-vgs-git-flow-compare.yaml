@@ -18,8 +18,10 @@ jobs:
           pip3 install vgs-cli
       - name: Diff Vault config
         run: |
-          for file in $(ls /live/tnt*yaml /sandbox/tnt*yaml  2> /dev/null);
+          for path in $(ls live/tnt*yaml sandbox/tnt*yaml  2> /dev/null);
           do
+            file=${path#*/}
+            echo Comparing route: $file
             vgs get routes --vault ${file/.yaml/} > ${file}.applied;
             diff -u ${file}.applied ${file} || echo "found a diff"
           done

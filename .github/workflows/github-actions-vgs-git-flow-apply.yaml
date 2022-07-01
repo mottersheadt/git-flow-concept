@@ -18,9 +18,11 @@ jobs:
           pip3 install vgs-cli
       - name: Apply to Vaults
         run: |
-          for file in $(ls /live/tnt*yaml /sandbox/tnt*yaml  2> /dev/null);
+          for path in $(ls live/tnt*yaml sandbox/tnt*yaml  2> /dev/null);
           do
-            vgs --debug apply routes --vault ${file/.yaml/} -f ${file};
+            file=${path#*/}
+            echo Updating route: $file
+            vgs --debug apply routes --vault ${file/.yaml/} -f ${path};
           done
         env:
           VGS_CLIENT_ID: ${{ secrets.VGS_CLIENT_ID }}
