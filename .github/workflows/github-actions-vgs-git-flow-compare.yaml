@@ -21,9 +21,10 @@ jobs:
           for path in $(ls live/tnt*yaml sandbox/tnt*yaml  2> /dev/null);
           do
             file=${path#*/}
-            echo Comparing route: $file
-            vgs get routes --vault ${file/.yaml/} > ${file}.applied;
-            diff -u ${file}.applied ${file} || echo "found a diff"
+            vault=${file%%.*}
+            echo Comparing route: $path
+            vgs get routes --vault ${vault} > ${path}.applied;
+            diff -u ${path}.applied ${path} || echo "found a diff"
           done
         env:
           VGS_CLIENT_ID: ${{ secrets.VGS_CLIENT_ID }}
